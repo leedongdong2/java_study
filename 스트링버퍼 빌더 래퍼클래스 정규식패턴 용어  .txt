@@ -1,0 +1,44 @@
+String/ StringBuffer / StringBuilder 차이점 * 속도차이(약천배차이)
+
+StringBuffer : 동기화기능 순차적으로 처리해준다(병행처리할떄 안전하다)
+StringBuilder : 가장빠르지만 동기화 지원 x 병행처리할떄 안전하지않다
+
+StringBuffer와 StringBuilder는 append로 추가해준다
+
+wrapper클래스 
+collection에는 객체형만 쓸수 있기떄문에 기본형을 객체형으로 바꾸어 주는 클래스(객체형을 기본형으로도 가능)
+(오토박싱이됨)
+
+기본형      래퍼클래스
+boolean      Boolean
+char          Character
+byte          Byte
+short         Short
+int            Integer
+long          Long
+float          Float
+double       Double
+
+------------------------------------------------|
+정규식(pattern):RegExp(Regular Expression)  |
+------------------------------------------------|
+사용절차                                            |
+1) 패턴정의(문자열)                               |
+2) Pattern 객체생성                               |
+3) Pattern 객체를 사용하여 Matcher를 생성  |
+4) 매칭여부를 판단한다.                          |
+------------------------------------------------|
+
+정규식 패턴표현
+
+. : 시작
+[] : 범위
+- : 에서 ~
+* : 0개이상 *문자 : 문자를 포함
+{} : 받을수자 계수 {1,2} : 1자리에서 2자리까지
+.* : 모든 문자열
+가로안에있어야함[^] : 부정(아니다) [^a] : a가 아니면 참
+^[문자] : 문자로 시작하는 ^[a] : a로 끝나는
+[문자]$ : 문자로 끝나는 [a]$ : a로 끝나는  
+( ) : 그룹을 나타냄
+\ : 특수문자를 나타내는 기호
