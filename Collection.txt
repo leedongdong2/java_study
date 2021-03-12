@@ -3,13 +3,24 @@ Collection
 List                                              |
 -배열과 가장 유사한 성질을 갖고 있다.   |
 -중복(o),순서(o)                               |
--첨자를 사용하여 접근                       |    C : (생성,입력,추가) add, map =put
+-(index)첨자를 사용하여 접근              |    C : (생성,입력,추가) add, map =put
+-수정 set(index)                               |
 Set                                               |    R : (읽기,검색) list=get(index),
--중복(x),순서(x)                                |     U : (수정)     
+-중복(x),순서(x)                                | 
+-첨자 사용불가                                |
+-삭제후 재 등록                               |     U : (수정)     
 Map                                             |     D : (삭제) remove
 -key,value가 한쌍으로 이루어짐            |
 -key 중복불가. value는 중복가능           |
-                                                   |
+-추가 :put                                      |
+-수정:동일한k로 put을 하면 기존          |
+저장데이터에 저장됨                         |
+-삭제:remove                                  |
+-조회:get(k) k를 사용하여 조회함,         |
+또는 v들만 따로 가져올수 잇다.           |                                                  |
+                                                  |
+                                                  |
+                                                  |
 Properties                                       |
 -key=value가 한쌍으로 이루어짐.           |
 -key,value가 모두 문자열                     |
