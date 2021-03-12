@@ -3,6 +3,7 @@ package section11;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.SystemColor;
 import java.awt.Font;
@@ -11,17 +12,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class DelPanel extends JPanel {
+	Member m;
 	private JButton btnNewButton_1;
 	private JLabel lblNewLabel_4;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField tfaddress;
+	private JTextField tfphone;
 	private JLabel lblNewLabel_3;
-	private JTextField textField_2;
+	private JTextField tfirum;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_1;
-	private JTextField textField_3;
+	private JTextField tfid;
 	private JButton btnNewButton;
-	private JTextField textField_4;
+	private JTextField tffind;
 	private JLabel lblNewLabel;
 
 	/**
@@ -31,21 +33,33 @@ public class DelPanel extends JPanel {
 		setLayout(null);
 		add(getBtnNewButton_1());
 		add(getLblNewLabel_4());
-		add(getTextField());
-		add(getTextField_1());
+		add(getTfaddress());
+		add(getTfphone());
 		add(getLblNewLabel_3());
-		add(getTextField_2());
+		add(getTfirum());
 		add(getLblNewLabel_2());
 		add(getLblNewLabel_1());
-		add(getTextField_3());
+		add(getTfid());
 		add(getBtnNewButton());
-		add(getTextField_4());
+		add(getTffind());
 		add(getLblNewLabel());
 
 	}
 	public JButton getBtnNewButton_1() {
 		if (btnNewButton_1 == null) {
 			btnNewButton_1 = new JButton("\uC0AD\uC81C");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+			
+					if(m==null) {
+						JOptionPane.showMessageDialog(DelPanel.this, "먼저검색하세요");
+					}else {
+					MemberController mc = new MemberController();
+					String msg = mc.delete(m);
+					JOptionPane.showMessageDialog(DelPanel.this, msg);
+					}
+				}
+			});
 			btnNewButton_1.setBorderPainted(false);
 			btnNewButton_1.setBackground(Color.RED);
 			btnNewButton_1.setBounds(82, 236, 71, 27);
@@ -59,21 +73,21 @@ public class DelPanel extends JPanel {
 		}
 		return lblNewLabel_4;
 	}
-	public JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setColumns(10);
-			textField.setBounds(81, 205, 210, 21);
+	public JTextField getTfaddress() {
+		if (tfaddress == null) {
+			tfaddress = new JTextField();
+			tfaddress.setColumns(10);
+			tfaddress.setBounds(81, 205, 210, 21);
 		}
-		return textField;
+		return tfaddress;
 	}
-	public JTextField getTextField_1() {
-		if (textField_1 == null) {
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(81, 174, 105, 21);
+	public JTextField getTfphone() {
+		if (tfphone == null) {
+			tfphone = new JTextField();
+			tfphone.setColumns(10);
+			tfphone.setBounds(81, 174, 105, 21);
 		}
-		return textField_1;
+		return tfphone;
 	}
 	public JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
@@ -82,13 +96,13 @@ public class DelPanel extends JPanel {
 		}
 		return lblNewLabel_3;
 	}
-	public JTextField getTextField_2() {
-		if (textField_2 == null) {
-			textField_2 = new JTextField();
-			textField_2.setColumns(10);
-			textField_2.setBounds(81, 143, 126, 21);
+	public JTextField getTfirum() {
+		if (tfirum == null) {
+			tfirum = new JTextField();
+			tfirum.setColumns(10);
+			tfirum.setBounds(81, 143, 126, 21);
 		}
-		return textField_2;
+		return tfirum;
 	}
 	public JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
@@ -104,29 +118,51 @@ public class DelPanel extends JPanel {
 		}
 		return lblNewLabel_1;
 	}
-	public JTextField getTextField_3() {
-		if (textField_3 == null) {
-			textField_3 = new JTextField();
-			textField_3.setColumns(10);
-			textField_3.setBounds(81, 112, 142, 21);
+	public JTextField getTfid() {
+		if (tfid == null) {
+			tfid = new JTextField();
+			tfid.setEditable(false);
+			tfid.setColumns(10);
+			tfid.setBounds(81, 112, 142, 21);
 		}
-		return textField_3;
+		return tfid;
 	}
 	public JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("\uAC80\uC0C9");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {	
+					String id = tffind.getText();
+					String msg2 = "아이디먼저 입력";
+						if(id.equals("")) {
+							JOptionPane.showMessageDialog(DelPanel.this, msg2);
+						}
+					MemberController mc = new MemberController();
+					m = mc.selectOne(id);	
+					String msg = "찾으시는 데이터가 없습니다";
+					if(m==null) {
+						JOptionPane.showMessageDialog(DelPanel.this, msg);
+					}else {
+						tfid.setText(m.id);
+						tfirum.setText(m.irum);
+						tfphone.setText(m.phone);
+						tfaddress.setText(m.address);
+					}
+					
+				}
+			});
 			
 			btnNewButton.setBounds(140, 66, 83, 22);
 		}
 		return btnNewButton;
 	}
-	public JTextField getTextField_4() {
-		if (textField_4 == null) {
-			textField_4 = new JTextField();
-			textField_4.setColumns(10);
-			textField_4.setBounds(12, 67, 116, 21);
+	public JTextField getTffind() {
+		if (tffind == null) {
+			tffind = new JTextField();
+			tffind.setColumns(10);
+			tffind.setBounds(12, 67, 116, 21);
 		}
-		return textField_4;
+		return tffind;
 	}
 	public JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {

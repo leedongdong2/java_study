@@ -2,6 +2,8 @@ package section11;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -12,17 +14,17 @@ import java.awt.event.ActionEvent;
 
 public class UpdatePanel extends JPanel {
 	private JLabel lblNewLabel;
-	private JTextField textField;
+	private JTextField tffindstr;
 	private JButton btnNewButton;
 	private JSeparator separator;
-	private JTextField textField_1;
+	private JTextField tfaddress;
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_3;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField tfphone;
+	private JTextField tfirum;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_1;
-	private JTextField textField_4;
+	private JTextField tfid;
 	private JButton btnNewButton_1;
 
 	/**
@@ -31,17 +33,17 @@ public class UpdatePanel extends JPanel {
 	public UpdatePanel() {
 		setLayout(null);
 		add(getLblNewLabel());
-		add(getTextField());
+		add(getTffindstr());
 		add(getBtnNewButton());
 		add(getSeparator());
-		add(getTextField_1());
+		add(getTfaddress());
 		add(getLblNewLabel_4());
 		add(getLblNewLabel_3());
-		add(getTextField_2());
-		add(getTextField_3());
+		add(getTfphone());
+		add(getTfirum());
 		add(getLblNewLabel_2());
 		add(getLblNewLabel_1());
-		add(getTextField_4());
+		add(getTfid());
 		add(getBtnNewButton_1());
 
 	}
@@ -56,17 +58,33 @@ public class UpdatePanel extends JPanel {
 		}
 		return lblNewLabel;
 	}
-	public JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setBounds(12, 48, 116, 21);
-			textField.setColumns(10);
+	public JTextField getTffindstr() {
+		if (tffindstr == null) {
+			tffindstr = new JTextField();
+			tffindstr.setBounds(12, 48, 116, 21);
+			tffindstr.setColumns(10);
 		}
-		return textField;
+		return tffindstr;
 	}
 	public JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("\uAC80\uC0C9");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String id = tffindstr.getText();
+					String msg = "검색할 데이터가 없습니다";
+					MemberController mc = new MemberController();
+					Member m = mc.selectOne(id);
+					if(m==null) {
+						JOptionPane.showMessageDialog(UpdatePanel.this,msg);
+					}else {
+					tfid.setText(m.id);
+					tfirum.setText(m.irum);
+					tfphone.setText(m.phone);
+					tfaddress.setText(m.address);
+					}
+				}
+			});
 			btnNewButton.setBounds(140, 47, 83, 22);
 		}
 		return btnNewButton;
@@ -78,13 +96,13 @@ public class UpdatePanel extends JPanel {
 		}
 		return separator;
 	}
-	public JTextField getTextField_1() {
-		if (textField_1 == null) {
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(81, 186, 210, 21);
+	public JTextField getTfaddress() {
+		if (tfaddress == null) {
+			tfaddress = new JTextField();
+			tfaddress.setColumns(10);
+			tfaddress.setBounds(81, 186, 210, 21);
 		}
-		return textField_1;
+		return tfaddress;
 	}
 	public JLabel getLblNewLabel_4() {
 		if (lblNewLabel_4 == null) {
@@ -100,21 +118,21 @@ public class UpdatePanel extends JPanel {
 		}
 		return lblNewLabel_3;
 	}
-	public JTextField getTextField_2() {
-		if (textField_2 == null) {
-			textField_2 = new JTextField();
-			textField_2.setColumns(10);
-			textField_2.setBounds(81, 155, 105, 21);
+	public JTextField getTfphone() {
+		if (tfphone == null) {
+			tfphone = new JTextField();
+			tfphone.setColumns(10);
+			tfphone.setBounds(81, 155, 105, 21);
 		}
-		return textField_2;
+		return tfphone;
 	}
-	public JTextField getTextField_3() {
-		if (textField_3 == null) {
-			textField_3 = new JTextField();
-			textField_3.setColumns(10);
-			textField_3.setBounds(81, 124, 126, 21);
+	public JTextField getTfirum() {
+		if (tfirum == null) {
+			tfirum = new JTextField();
+			tfirum.setColumns(10);
+			tfirum.setBounds(81, 124, 126, 21);
 		}
-		return textField_3;
+		return tfirum;
 	}
 	public JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
@@ -130,19 +148,29 @@ public class UpdatePanel extends JPanel {
 		}
 		return lblNewLabel_1;
 	}
-	public JTextField getTextField_4() {
-		if (textField_4 == null) {
-			textField_4 = new JTextField();
-			textField_4.setColumns(10);
-			textField_4.setBounds(81, 93, 142, 21);
+	public JTextField getTfid() {
+		if (tfid == null) {
+			tfid = new JTextField();
+			tfid.setEditable(false);
+			tfid.setColumns(10);
+			tfid.setBounds(81, 93, 142, 21);
 		}
-		return textField_4;
+		return tfid;
 	}
 	public JButton getBtnNewButton_1() {
 		if (btnNewButton_1 == null) {
 			btnNewButton_1 = new JButton("\uC218\uC815");
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String id = tffindstr.getText();
+					MemberController mc = new MemberController();
+					Member m = mc.selectOne(id);
+					m.setIrum(tfirum.getText());
+					m.setPhone(tfphone.getText());
+					m.setAddress(tfaddress.getText());
+					String msg = mc.update(m);
+					JOptionPane.showMessageDialog(UpdatePanel.this, msg);
+					
 				}
 			});
 			btnNewButton_1.setBounds(82, 217, 71, 27);
