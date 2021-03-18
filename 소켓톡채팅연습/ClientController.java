@@ -9,6 +9,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import javax.swing.text.Element;
+import javax.swing.text.StyledDocument;
+
 public class ClientController implements Runnable{
 ClientFrame cf;
 
@@ -17,6 +20,9 @@ ClientFrame cf;
 
 BufferedWriter send;//데이터를 전송
 BufferedReader receive;//데이터를 수신
+
+Element root;
+Element element;
 
 public ClientController(ClientFrame cf){
 	this.cf = cf;
@@ -62,7 +68,20 @@ public void sendMsg(String msg) {
 
 @Override
 public void run() {
+	while(true) {
+		try {
+			String msg = receive.readLine();
 	
+			
+			root = cf.document.getRootElements()[0];
+			element = root.getElement(0);
+			cf.document.insertBeforeEnd(element,msg);
+			cf.getTextPane().setCaretPosition(cf.document.getLength());
+	
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	
 }
 	

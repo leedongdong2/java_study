@@ -7,6 +7,10 @@ import java.net.InetAddress;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.Element;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -37,6 +41,12 @@ public class ClientFrame extends JFrame {
     
     ClientController cc;
     
+    HTMLEditorKit editorKit;
+	HTMLDocument document;
+	StyleSheet styleSheet;
+	private JLabel lblNewLabel;
+	private JTextField textField;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -54,6 +64,7 @@ public class ClientFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public ClientFrame() {
+		setTitle("\uC0AC\uC6A9\uC790");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 514, 350);
 		contentPane = new JPanel();
@@ -73,17 +84,42 @@ public class ClientFrame extends JFrame {
 		try {
 			InetAddress ia = InetAddress.getLocalHost();
 			tfServerIP.setText(ia.getHostAddress());
+			
+			editorKit = new HTMLEditorKit();
+			styleSheet = new StyleSheet();
+			
+			styleSheet.addRule("div {border:1px solid #0000ff;padding:5px;width:80%;margin-bottom:10px;}");
+	          
+			styleSheet.addRule(".left{color:#ff0000;text-align:left;border:1px solid #ff0000}");
+			styleSheet.addRule(".right{color:#0000ff;text-align:right;border:1px solid #0000ff}");
+			
+			editorKit.setStyleSheet(styleSheet);
+			document = (HTMLDocument) editorKit.createDefaultDocument();
+			
+			textPane.setEditorKit(editorKit);
+			textPane.setDocument(document);
+			contentPane.add(getLblNewLabel());
+			contentPane.add(getTextField());
+			
 			}       
 			catch(Exception e) {
 			   e.printStackTrace();
-			   textPane.setText("<font color='red'>IP주소를 가져오는데 오류가 났습니다");
+			   String msg = ("<font color='red'>IP주소를 가져오는데 오류가 났습니다");
+			   Element root = document.getRootElements()[0];
+			   Element element = root.getElement(0);
+			   try {
+			   document.insertBeforeEnd(element, msg);
+			   }catch(Exception e1) {
+				   e1.printStackTrace();
+			   }
+			   textPane.setCaretPosition(document.getLength());
 			}
 	}
 
 	public JLabel getLblIp() {
 		if (lblIp == null) {
 			lblIp = new JLabel("IP");
-			lblIp.setBounds(40, 25, 47, 20);
+			lblIp.setBounds(12, 24, 47, 20);
 		}
 		return lblIp;
 	}
@@ -91,7 +127,7 @@ public class ClientFrame extends JFrame {
 		if (tfServerIP == null) {
 			tfServerIP = new JTextField();
 			tfServerIP.setColumns(10);
-			tfServerIP.setBounds(71, 25, 90, 21);
+			tfServerIP.setBounds(32, 24, 74, 21);
 		}
 		return tfServerIP;
 	}
@@ -100,14 +136,14 @@ public class ClientFrame extends JFrame {
 			tfPort = new JTextField();
 			tfPort.setText("4545");
 			tfPort.setColumns(10);
-			tfPort.setBounds(195, 25, 56, 21);
+			tfPort.setBounds(147, 24, 35, 21);
 		}
 		return tfPort;
 	}
 	public JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("Port");
-			lblNewLabel_1.setBounds(166, 28, 28, 15);
+			lblNewLabel_1.setBounds(118, 27, 28, 15);
 		}
 		return lblNewLabel_1;
 	}
@@ -167,7 +203,7 @@ public class ClientFrame extends JFrame {
 					btnDisConnect.setEnabled(true);
 				}
 			});
-			btnConnect.setBounds(263, 24, 97, 23);
+			btnConnect.setBounds(330, 23, 80, 23);
 		}
 		return btnConnect;
 	}
@@ -175,7 +211,7 @@ public class ClientFrame extends JFrame {
 		if (btnDisConnect == null) {
 			btnDisConnect = new JButton("\uD574\uC81C");
 			btnDisConnect.setEnabled(false);
-			btnDisConnect.setBounds(363, 24, 97, 23);
+			btnDisConnect.setBounds(412, 23, 74, 23);
 		}
 		return btnDisConnect;
 	}
@@ -184,8 +220,9 @@ public class ClientFrame extends JFrame {
 			btnSend = new JButton("\uC804\uC1A1");
 			btnSend.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					cc.sendMsg(tfMsg.getText());
+				String msg = String.format("<div class ='right'>%s</div>", tfMsg.getText());
+					cc.sendMsg(msg);
+					tfMsg.setText("");
 				}
 			});
 			btnSend.setBounds(375, 278, 97, 23);
@@ -204,5 +241,20 @@ public class ClientFrame extends JFrame {
 			textPane_1 = new JTextPane();
 		}
 		return textPane_1;
+	}
+	public JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("\uC544\uC774\uB514");
+			lblNewLabel.setBounds(194, 27, 47, 15);
+		}
+		return lblNewLabel;
+	}
+	public JTextField getTextField() {
+		if (textField == null) {
+			textField = new JTextField();
+			textField.setBounds(237, 24, 80, 21);
+			textField.setColumns(10);
+		}
+		return textField;
 	}
 }

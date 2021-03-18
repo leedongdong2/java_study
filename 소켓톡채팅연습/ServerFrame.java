@@ -7,6 +7,10 @@ import java.net.InetAddress;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.Element;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -40,6 +44,11 @@ public class ServerFrame extends JFrame {
 	 */
 	
 	ServerController sc;
+	
+	HTMLEditorKit editorKit;
+	HTMLDocument document;
+	StyleSheet styleSheet;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -77,10 +86,35 @@ public class ServerFrame extends JFrame {
 		try {
 		InetAddress ia = InetAddress.getLocalHost();
 		tfServerIP.setText(ia.getHostAddress());
+		
+		editorKit = new HTMLEditorKit();
+		styleSheet = new StyleSheet();
+		
+		styleSheet.addRule("div {border:1px solid #0000ff;padding:5px;width:80%;margin-bottom:10px;}");
+		styleSheet.addRule(".left{color:#ff0000;text-align:left;border:1px solid #ff0000}");
+		styleSheet.addRule(".right{color:#0000ff;text-align:right;border:1px solid #0000ff}");
+		
+		editorKit.setStyleSheet(styleSheet);
+		document = (HTMLDocument) editorKit.createDefaultDocument();
+		
+		textPane.setEditorKit(editorKit);
+		textPane.setDocument(document);
+		
+		
 		}       
 		catch(Exception e) {
 		   e.printStackTrace();
-		   textPane.setText("<font color='red'>IP주소를 가져오는데 오류가 났습니다");
+		   String msg = ("<font color='red'>IP주소를 가져오는데 오류가 났습니다");
+		   Element root = document.getRootElements()[0];
+		   Element element = root.getElement(0);
+		   try {
+			   document.insertBeforeEnd(element, msg);
+			   textPane.setCaretPosition(document.getLength());
+		   }catch(Exception ex2) {
+			   ex2.printStackTrace();
+		   }
+		
+		
 		}
 	
 	}
@@ -173,6 +207,9 @@ public class ServerFrame extends JFrame {
 		if (textPane == null) {
 			textPane = new JTextPane();
 			textPane.setContentType("text/html");
+		    
+			
+		
 		}
 		return textPane;
 	}
@@ -194,6 +231,15 @@ public class ServerFrame extends JFrame {
 	public JButton getBtnSand() {
 		if (btnSand == null) {
 			btnSand = new JButton("\uC804\uC1A1");
+			btnSand.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//서버가 클라이언트에게 메시지를 전송하는 기능
+					String msg = String.format("<div class = 'left'>%s</div>", tfMsg.getText());
+					sc.sendAll(msg);
+					tfMsg.setText("");
+					
+				}
+			});
 			btnSand.setBounds(375, 276, 97, 23);
 		}
 		return btnSand;
