@@ -1,0 +1,27 @@
+페이징 처리를 위한 연산
+
+totList = 5000;(검색된 전체 건수)
+listSize = 10; (한페이지에 표시될 행수)
+blockSize = 5;(한 화면에 표시될 페이지 번호 수)
+totPage = 0 ; (totList / listSize)
+startNo,endNo = 한페이지에 표시될 행의 번호
+startPage, endPage : 한 화면에 표시되는 페이지 번호
+nowPage:현재 보고 있는 페이지의 위치
+
+-------------------------------------------------------------
+(실제 계산)
+//총페이지의 갯수를 구함 ceil절상 소숫점단위를 무조건 절상해 페이지수를 정수로 딱딱 구한다
+totPage = (int)Math.ceil(totList/(doubel)listSize);
+//endNo = 현재 내 페이지의 수 * 한 페이지의 표시될 행수가 된다
+예)2페이지 10행 = 20번
+endNo = nowPage*listSize;
+//startNo = 현재 엔드넘버에 페이지 행수를 뺴고 1을 더하면 현재페이지의 스타트넘버를 구할수있다
+startNo  = endNo-listSize+1;
+// 하지만 여기서 만약 표시될 리스트 사이즈가 10단위가 아니라 그 이하로 끝날경우에는
+// endNo를 총 검색된 전체 건수의 건수로 바꾸어준다 
+// 페이지가 10단위 아래로 될경우는 맨마지막페이지에만 해당되므로 기본적으로는 nowPage*listSize로 구해 스타트넘버를 제대로 계산해주어야한다 
+if(endNo>totList) endNo =totList;
+
+endPage = (int)Math.ceil(nowPage/(double)blockSize)*blockSize
+startPage = endPage-blockSize+1;
+if(endPage>totPage) endPage = totPage;
